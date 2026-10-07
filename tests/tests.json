@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Official and explainable investigation path",
+    "sanity": true,
+    "viewport": "desktop",
+    "covers": [
+      "Investigations",
+      "POST /api/analyze",
+      "official identity exclusion",
+      "homoglyph detection",
+      "benign guardrail",
+      "investigation evidence"
+    ],
+    "description": "Verifies evaluator presets use the real backend engine and preserve OFFICIAL, HIGH, and LOW outcomes with explainable evidence.",
+    "steps": [
+      "Open Investigations and run Official PayNova",
+      "Close the evidence drawer and run PayNоva Support",
+      "Close the drawer and run Pavel Novak"
+    ],
+    "expected": "Official PayNova is OFFICIAL without threat scoring, PayNоva Support is HIGH with homoglyph evidence, and Pavel Novak is LOW."
+  },
+  {
+    "name": "Custom candidate validation and analysis",
+    "viewport": "desktop",
+    "covers": [
+      "Evaluator-Controlled Analysis",
+      "POST /api/analyze",
+      "client validation",
+      "backend error handling"
+    ],
+    "description": "Verifies invalid custom input is blocked and a valid suspicious candidate is analyzed by the backend risk engine.",
+    "steps": [
+      "Open Investigations and submit the empty evaluator-controlled form",
+      "Enter PayNova Account Recovery, paynova_recovery_team, Account Help Desk, URGENT click the link and login to verify your PayNova account, and https://paynova-account-check.example.org",
+      "Analyze candidate"
+    ],
+    "expected": "Required-field validation appears first; the valid suspicious candidate then produces a clearly elevated backend result in the evidence drawer."
+  },
+  {
+    "name": "Persisted fixture detection to incident lifecycle",
+    "viewport": "desktop",
+    "covers": [
+      "Monitor",
+      "POST /api/scans",
+      "GET /api/state",
+      "Detections filters",
+      "POST /api/incidents",
+      "PUT /api/incidents/:id",
+      "POST /api/incidents/:id/false-positive",
+      "persistence after reload"
+    ],
+    "description": "Verifies the core fixture scan, detection filtering, incident creation, analyst transition, false-positive decision, and refresh persistence workflow.",
+    "steps": [
+      "Run Instagram FIXTURE from Monitor",
+      "In Detections filter to HIGH and FIXTURE, investigate a result, then create an incident",
+      "Move the NEW incident to INVESTIGATING, mark it FALSE POSITIVE, and refresh the page"
+    ],
+    "expected": "The scan and incident survive refresh, provenance remains FIXTURE, and the FALSE POSITIVE decision remains in incident history."
+  },
+  {
+    "name": "Apple live provenance and fallback truthfulness",
+    "viewport": "desktop",
+    "covers": [
+      "Monitor",
+      "Apple live adapter",
+      "POST /api/scans",
+      "LIVE provenance",
+      "zero-result handling",
+      "FALLBACK_FIXTURE provenance"
+    ],
+    "description": "Verifies Apple is the only live source and that successful, empty, and unavailable upstream outcomes are represented truthfully.",
+    "steps": [
+      "Open Monitor",
+      "Run Apple App Store LIVE",
+      "Review the resulting status and provenance in Detections or Analytics"
+    ],
+    "expected": "A successful Apple request is LIVE even with zero results; only an actual upstream failure is labelled FALLBACK and shown with a warning."
+  },
+  {
+    "name": "Mobile brand configuration and operational navigation",
+    "viewport": "mobile",
+    "covers": [
+      "responsive navigation",
+      "Brand Assets",
+      "POST /api/brands",
+      "Dashboard",
+      "Analytics",
+      "accessibility"
+    ],
+    "description": "Verifies the compact workspace navigation remains usable on mobile and protected brand configuration persists through the real API.",
+    "steps": [
+      "Open the mobile navigation and go to Brand Assets",
+      "Confirm the protected brand profile and save it",
+      "Navigate to Dashboard and Analytics using the mobile sidebar"
+    ],
+    "expected": "Navigation does not cause page-level horizontal overflow, the protected brand saves through the backend, and Dashboard and Analytics remain usable."
+  }
+]
