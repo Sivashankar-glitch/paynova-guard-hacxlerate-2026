@@ -1,0 +1,43 @@
+name: Bootstrap PayNova Guard source
+
+on:
+  push:
+    paths:
+      - 'paynova-guard-hacxlerate-2026-github-upload.zip'
+      - '.github/workflows/bootstrap-source.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  unpack-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Unpack GitHub-ready source
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .bootstrap-source
+          mkdir -p .bootstrap-source
+          unzip -q paynova-guard-hacxlerate-2026-github-upload.zip -d .bootstrap-source
+          cp -a .bootstrap-source/paynova-guard-hacxlerate-2026-github/. .
+          rm -rf .bootstrap-source
+          rm -f paynova-guard-hacxlerate-2026-github-upload.zip
+          rm -f .github/workflows/bootstrap-source.yml
+
+      - name: Commit source files
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo 'No source changes to commit.'
+            exit 0
+          fi
+          git commit -m 'feat: add PayNova Guard full-stack source'
+          git push
